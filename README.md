@@ -42,7 +42,7 @@ There is nothing you will need to do before attending this workshop. We will be 
 
 | Time          | Activity              | Materials                |
 | :------------ | :-------------------- | :----------------------- |
-| 09:00 - 10:30 | Welcome & Intro       | <a href="https://posit-conf-2023.github.io/shiny-r-intro/slides/01-Welcomeand_Intro.html">:notebook:</a>        |
+| 09:00 - 10:30 | Welcome & Intro       | <a href="https://posit-conf-2023.github.io/shiny-r-intro/slides/01-Welcome_and_Intro.html">:notebook:</a>        |
 | 10:30 - 11:00 | *Coffee break*        |                                                                                                        |
 | 11:00 - 12:30 | Reactivity            | <a href="https://posit-conf-2023.github.io/shiny-r-intro/slides/02-Reactivity.html">:notebook:</a>     |
 | 12:30 - 13:30 | *Lunch break*         |                                                                                                        |
