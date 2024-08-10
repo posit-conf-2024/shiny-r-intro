@@ -1,0 +1,87 @@
+---
+format:
+  html:
+    self-contained: true
+    page-layout: custom
+execute: 
+  echo: false
+---
+
+```{r}
+#| include: false
+library(bslib)
+library(bsicons)
+library(tidyverse)
+```
+
+
+```{r anim_helpers}
+#| results: hide
+library(htmltools)
+
+anim_width <- function(x, width1, width2) {
+  x |> tagAppendAttributes(
+    class = "animate-width",
+    style = css(
+      `--width1` = validateCssUnit(width1),
+      `--width2` = validateCssUnit(width2),
+    ),
+  )
+}
+
+anim_height <- function(x, height1, height2) {
+  # Wrap in a div fixed at the height of height2, so the rest of
+  # the content on the page doesn't shift up and down
+  div(style = css(height = validateCssUnit(height2)),
+    x |> tagAppendAttributes(
+      class = "animate-height",
+      style = css(
+        `--height1` = validateCssUnit(height1),
+        `--height2` = validateCssUnit(height2),
+      ),
+    )
+  )
+}
+```
+
+```{css}
+@keyframes changewidth {
+  from { width: var(--width1); }
+  25% { width: var(--width1); }
+  50% { width: var(--width2); }
+  75% { width: var(--width2); }
+  to { width: var(--width1); }
+}
+.animate-width {
+  animation-duration: 6s;
+  animation-name: changewidth;
+  animation-iteration-count: infinite;
+  border-right: 2px solid #DDD;
+  padding-right: 1rem;
+  padding-bottom: 3rem;
+}
+
+@keyframes changeheight {
+  from { height: var(--height1); }
+  25% { height: var(--height1); }
+  50% { height: var(--height2); }
+  75% { height: var(--height2); }
+  to { height: var(--height1); }
+}
+.animate-height {
+  height: 600px;
+  animation-duration: var(--anim-duration, 6s);
+  animation-name: changeheight;
+  animation-iteration-count: infinite;
+  padding-bottom: 3rem;
+}
+```
+
+```{r}
+value_box(
+  title = "I got",
+  value = "99 problems",
+  showcase = bs_icon("music-note-beamed"),
+  p("bslib ain't one", bs_icon("emoji-smile"))
+)
+```

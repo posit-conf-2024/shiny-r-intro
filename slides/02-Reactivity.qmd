@@ -1,0 +1,357 @@
+---
+title: "Getting Started with Shiny<br/>Reactivity"
+author: "Colin Rundel"
+format: 
+  revealjs:
+    logo: images/shiny.png
+    footer: "posit::conf 2024 - Getting Started with Shiny"
+    slide-number: true
+    highlight-style: a11y
+    theme: [default, custom.scss]
+    self-contained: true
+execute:
+  echo: true
+title-slide-attributes:
+    data-background-image: "images/Seattle_Skyline.jpg"
+    data-background-size: cover
+    data-background-opacity: "0.33"
+---
+
+# Basic Reactivity
+
+## Reactive elements
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo01.R`
+:::
+::: {.code-half}
+```{r}
+#| eval: false
+#| code-line-numbers: "|10-20|23"
+#| file: "../demos/demo01.R"
+```
+:::
+
+
+::: {style="width:100%; height: 30%; text-align: center;"}
+::: {style="width:50%; display: inline-block; text-align: center;"}
+![](images/diag-1.png){fig-align="center" width="100%"}
+:::
+:::
+
+Our inputs and outputs are defined by the elements in our `ui`.
+
+
+## Reactive expression to reactive graph
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo01.R`
+:::
+::: {.code-half}
+```{r}
+#| eval: false
+#| code-line-numbers: "|28-35|29-34"
+#| file: "../demos/demo01.R"
+```
+:::
+
+
+::: {style="width:100%; height: 30%; text-align: center;"}
+::: {style="width:50%; display: inline-block; text-align: center;"}
+![](images/diag-2.png){fig-align="center" width="100%"}
+:::
+:::
+
+The "reactive" logic is defined in our `server` function - `shiny` takes care of figuring out what depends on what.
+
+
+## Demo 02 - Adding an input
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo02.R`
+:::
+```{r}
+#| eval: false
+#| file: "../demos/demo02.R"
+#| code-line-numbers: "|6-13|30-33|32|42-46|45"
+```
+
+## `.data` & `.env`
+
+## `.data` pronoun
+
+One aspect of the improved code that you might be unfamiliar with is the use of `.data[[input$var]]` within the `renderPlot()` reactive expression. This is a useful feature from `rlang` that can be used across much of the tidyverse to reference columns in a data frame using a variable. 
+
+Specifically it is an alternative that is useful for avoiding some of the complexity around "non-standard evaluation" with `rlang` (e.g. `{{`, `!!`, `enquo()`, etc.) when working with functions built with the tidy eval framework (e.g. `dplyr` and `ggplot2`).
+
+
+::: aside
+For more details see the rlang [.data and .env pronouns](https://rlang.r-lib.org/reference/dot-data.html) article.
+:::
+
+
+## Reactive graph
+
+With these additions, what should our reactive graph look like now?
+
+. . .
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:40%; display: inline-block; text-align: center;"}
+![](images/diag-3.png){fig-align="center" width="100%"}
+:::
+:::
+
+
+## Your turn - Exercise 03
+
+Starting with the code  in `exercises/ex03.R` (based on `demo02.R`'s code) add a `tableOutput()` labeled `minmax` to the app's `mainPanel()`.
+
+Once you have done that you should then add logic to the `server` function to render a table that shows the min and max temperature for each year contained in these data.
+
+- You will need to add an appropriate output in the `ui` 
+- and a corresponding reactive expression in the `server` function to generate these summaries.
+- `lubridate::year()` will be useful along with `dplyr`s `group_by()` and `summarize()`.
+
+
+```{r}
+#| echo: false
+countdown::countdown(9)
+```
+
+## Exercise 03 - Solution
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `exercises/solutions/ex03_soln.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|37|50-61"
+#| file: ../exercises/solutions/ex03_soln.R
+```
+
+
+## Reactive graph (again)
+
+<br/>
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:60%; display: inline-block; text-align: center;"}
+![](images/diag-4.png){fig-align="center" width="100%"}
+:::
+:::
+
+## reactlog
+
+Another (more detailed) way of seeing the reactive graph (dynamically) for your app is using the `reactlog` package.
+
+
+Run the following to log and show all of the reactive events occuring within `ex03_soln.R`, 
+
+<br/>
+
+```{r}
+#| eval: false
+reactlog::reactlog_enable()
+
+(source(here::here("exercises/solutions/ex03_soln.R")))
+
+shiny::reactlogShow()
+```
+
+
+# `reactive()`
+
+## Don't repeat yourself (DRY)
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo03.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|31-32,39-40"
+#| file: ../demos/demo03.R
+```
+
+
+## Demo 04 - Using a reactive
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo04.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|45-48|51,58"
+#| file: ../demos/demo04.R
+```
+
+## Reactive expressions
+
+This is an example of a "reactive conductor" as it exists in between sources (e.g. an input) and endpoints (e.g. an output).
+
+As such, a `reactive()` depends on various upstream inputs and then has 1 or more downstream outputs.
+
+Their primary use is similar to a function in an R script, they help to
+
+- avoid repeating yourself
+
+- decompose complex computations into smaller / more modular steps
+
+- can improve computational efficiency by breaking up / simplifying reactive dependencies
+
+
+## `reactive()` tips
+
+- Expressions written in the same way as `render*()` functions
+
+- If `react_obj = reactive({...})` then any consumer 
+  must access value using `react_obj()` and *not* `react_obj`
+    - think of `react_obj` as a function that returns the current value
+    - Common cause of ~~everyone's~~ my favorite R error ,
+      
+      ``` 
+      ## Error: object of type 'closure' is not subsettable`
+      ```
+
+- Like `input` reactive expressions may only be used within a reactive context (e.g. `render*()`, `reactive()`, `observer()`, etc.)
+  
+  ```
+  ## Error: Operation not allowed without an active reactive context. (You tried to do something that can only be done from inside a reactive expression or observer.)
+  ```
+
+## Reactive graph
+
+```{mermaid}
+#| include: false
+flowchart LR
+  subgraph outputs
+  out1[plot]
+  out2[minmax]
+  end
+  subgraph reactives
+  react1{{d_city}}
+  end
+  subgraph inputs
+  in1([city]) 
+  in2([var])
+  end
+  in1 --> react1
+  react1 --> out1 & out2
+  in2 --> out1 & out2
+```
+
+<br/><br/>
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:80%; display: inline-block; text-align: center;"}
+![](images/diag-5.png){fig-align="center" width="100%"}
+:::
+:::
+
+
+# observers
+
+## `observer()`
+
+These are constructed in the same way as a `reactive()` however an observer does not return a value, as such they are used for their side effects.
+
+* The side effects in most cases involve sending data to the client broswer, e.g. updating a UI element
+
+* While not obvious given their syntax - the results of the `render*()` functions are observers.
+
+## Demo 05 - Filtering by region
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo05.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|19-22|23-25|40-48"
+#| file: ../demos/demo05.R
+```
+
+## Reactive graph
+
+<br/>
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:90%; display: inline-block; text-align: center;"}
+![](images/diag-6.png){fig-align="center" width="100%"}
+:::
+:::
+
+
+## Reactive graph - implicit
+
+<br/>
+
+::: {style="width:100%; text-align: center;"}
+::: {style="width:90%; display: inline-block; text-align: center;"}
+![](images/diag-6_anno.png){fig-align="center" width="100%"}
+:::
+:::
+
+
+## Using `req()`
+
+You may have notices that the App initializes with "West" selected for `region` but no initial selection for `name` because of this we have some warnings generated in the console:
+
+```r
+Warning: There were 2 warnings in `summarize()`.
+The first warning was:
+ℹ In argument: `min temp = min(temp_min)`.
+Caused by warning in `min()`:
+! no non-missing arguments to min; returning Inf
+ℹ Run dplyr::last_dplyr_warnings() to see the 1 remaining warning.
+```
+
+. . .
+
+This can be a common occurrence, particularly at initialization (or if a user enters bad / unexpected input).
+
+A good way to protect against this is to validate inputs - the simplest way is to use `req()` which checks if a value is [truthy](https://shiny.rstudio.com/reference/shiny/latest/isTruthy.html). Non-truthy values prevent further execution of the reactive code (and downstream consumer's code).
+
+
+## Your turn - Exercise 04
+
+Using the code provided in `exercise/ex04.R` (based on `demo/demo05.R`) as a starting point add the calls to `req()` necessary to avoid the initialization warnings. 
+
+Also, think about if there are any other locations in our app where `req()` might be useful.
+
+*Hint* - thinking about how events "flow" through the reactive graph will be helpful here.
+
+
+```{r}
+#| echo: false
+countdown::countdown(5)
+```
+
+
+
+## A note on observers
+
+Reactive graphs are meant to be acyclic, that is they should not have circular dependencies. The use of observers can introduce cycles which can then lead to infinite loops, see the following example:
+
+```{r}
+#| eval: false
+library(shiny)
+
+shinyApp(
+  ui = fluidPage(
+    numericInput("n", "n", 0)
+  ),
+  server = function(input, output, session) {
+    observeEvent(input$n, {
+      updateNumericInput(inputId = "n", value = input$n + 1)
+    })
+  }
+)
+```
+
+::: {.aside}
+From [Mastering Shiny](https://mastering-shiny.org/action-dynamic.html#circular-references)
+:::
+
+
+
+

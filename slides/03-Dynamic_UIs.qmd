@@ -1,0 +1,403 @@
+---
+title: "Getting Started with Shiny<br/>Dynamic UIs"
+author: "Colin Rundel"
+format: 
+  revealjs:
+    logo: images/shiny.png
+    footer: "posit::conf 2024 - Getting Started with Shiny"
+    slide-number: true
+    highlight-style: a11y
+    theme: [default, custom.scss]
+    self-contained: true
+execute:
+  echo: true
+title-slide-attributes:
+    data-background-image: "images/Seattle_Skyline.jpg"
+    data-background-size: cover
+    data-background-opacity: "0.33"
+---
+
+
+```{r include=FALSE}
+knitr::knit_engines$set(bslib = function(options) {
+  code = paste0(options$code, collapse = '\n')
+  
+  anim = !is.null(options$anim) && isTRUE(options$anim)
+  html = whisker::whisker.render(readr::read_file(".bslib_out/bslib.tmpl"))
+  
+  if (!dir.exists(".bslib_out")) {
+    dir.create(".bslib_out")
+  }
+  
+  qmd_file = file.path(".bslib_out", paste0(options$label,".qmd"))
+  readr::write_file(html, file=qmd_file)
+  quarto::quarto_render(qmd_file, quiet = TRUE)
+  
+  unlink(qmd_file)
+  html_file = stringr::str_replace(qmd_file, "\\.qmd", ".html")
+
+  height = if (is.null(options$height)) "100%" else options$height
+  
+  options$results = "asis"
+  options$engine = "R"
+  
+  out = glue::glue("<iframe src='{html_file}' width='100%' height='{height}' data-external=\"1\" scrolling=\"no\"></iframe>")
+                   
+  knitr::engine_output(options, options$code, out) #capture.output(print(options)))
+})
+
+library(shiny)
+library(bslib)
+library(bsicons)
+```
+
+
+# Downloading from Shiny
+
+## `downloadButton()` & `downloadHandler()`
+
+These are the UI and server components needed for downloading a file from your Shiny app. The downloaded file can be of any arbitrary type and content.
+
+`downloadButton()` is a special case of an `actionButton()` with specialized server syntax. 
+
+Specifically, within the server definition the `downloadHandler()` is attached to the button's id via `output`, e.g.
+```r
+output$download_btn = downloadHandler(...)
+```
+
+The handler then defines the `filename` function for generating a default filename and `content` function for writing the download file's content to a temporary file, which can then be served by Shiny for downloading.
+
+
+## Demo 06 - A download button
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo06.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|27|37-47|38-43|44-46"
+#| file: ../demos/demo06.R
+```
+
+## Action buttons
+
+These are a simple UI element that can be used to trigger an action within a Shiny app. Their difference from other UI input widgets is that we generally don't care about the value they "return", in this case the number of times they have been clicked.
+
+Instead we want to respond to the fact that they have been clicked.
+
+## `bindEvent()`
+
+For both observers and reactive expressions Shiny will automatically determine reactive dependencies for you - in some cases this is not what we want.
+
+To explicitly control the reactive dependencies of reactive expressions, render functions, and observers we can modify them using `bindEvent()` where the dependencies are explicitly provided.
+
+Similar effects can be achieved via `observeEvent()` / `eventReactive()` but these have been soft deprecated as of Shiny 1.6.
+
+::: aside
+*Note* - when binding a reactive you must use the functional form, i.e. `react()` and not `react`
+:::
+
+
+## Modal dialogs
+
+These are a popup window element that allow us to present important messages (e.g. warnings or errors) or other UI elements in a way that does not permanently clutter up the main UI of an app.
+
+The modal dialog consists of a number of Shiny UI elements (static or dynamic) and only displays when it is triggered (usually by something like an action button or link).
+
+They differ from other UI elements we've seen so far as they are usually defined within an app's server function and not the ui.
+
+
+## Demo 07 - A fancy download button
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo07.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|33|42-59|61-78"
+#| file: ../demos/demo07.R
+```
+
+
+# Uploading data
+
+## `fileInput()` widget
+
+This widget behaves a bit differently than the others we have seen - once a file is uploaded it returns a data frame with one row per file and the following columns:
+
+* `name` - the original filename (from the client's system)
+
+* `size` - file size in bytes
+
+* `type` - file [mime type](https://en.wikipedia.org/wiki/Media_type), usually determined by the file extension
+
+* `datapath` - location of the *temporary* file on the server
+
+Given this data frame your app's server code is responsible for the actual process of reading in the uploaded file.
+
+## Using `fileInput()`
+
+```{r}
+#| eval: false
+#| code-line-numbers: "|9|13,20-22|14,24-29"
+library(tidyverse)
+library(shiny)
+
+shinyApp(
+  ui = fluidPage(
+    titlePanel("File Upload"),
+    sidebarLayout(
+      sidebarPanel(
+        fileInput("upload", "Upload a file", accept = ".csv")
+      ),
+      mainPanel( 
+        h3("Result"),
+        tableOutput("result"),
+        h3("Content:"),
+        tableOutput("data")
+      )
+    )
+  ),
+  server = function(input, output, session) {
+    output$result = renderTable({
+      req(input$upload)
+      input$upload
+    })
+    
+    output$data = renderTable({
+      req(input$upload)
+      ext = tools::file_ext(input$upload$datapath)
+      
+      validate(
+        need(ext == "csv", "Please upload a csv file")
+      )
+      
+      readr::read_csv(input$upload$datapath)
+    })
+  }
+)
+```
+
+
+
+
+
+## `fileInput()` hints
+
+* `input$upload` will default to `NULL` when the app is loaded, using `req(input$upload)` for downstream consumers is a good idea
+
+* Files in `datapath` are temporary and should be treated as ephemeral 
+
+  * additional uploads can result in the previous files being deleted
+
+* `type` is at best a guess - validate uploaded files and write defensive code
+
+* The `accept` argument helps to limit file types but cannot prevent bad uploads
+
+
+## Your turn - Exercise 05
+
+Starting with the code in `exercises/ex05.R` replace the preloading of the weather data (`d`) with a `reactive()` version that is populated via a `fileInput()` widget. 
+
+You should then be able to get the same app behavior as before once `data/weather.csv` is uploaded. You can also check that your app works with the `data/portland.csv` dataset as well.
+
+*Hint* - remember that anywhere that uses either `d` will now need to use `d()` instead.
+
+```{r}
+#| echo: false
+countdown::countdown(10)
+```
+
+
+
+
+
+# Modern UIs with bslib
+
+## Shiny & bootstrap
+
+The interface provided by Shiny is based on the html elements, styling, and javascript provided by the [Bootstrap library](https://getbootstrap.com/).
+
+Knowing the specifics of html (and Bootstrap specifically) are not needed for working with Shiny - but understanding some of its conventions goes a long way to helping you customize the elements of your app (via custom CSS and other tools).
+
+This is not the only place that Bootstrap shows up in the R ecosystem - e.g. both RMarkdown and Quarto html documents use Bootstrap for styling as well.
+
+## bslib
+
+The bslib R package provides a modern UI toolkit for Shiny, R Markdown, and Quarto based on Bootstrap. It provides,
+
+* Custom theming of Shiny apps and R Markdown documents 
+
+* Switch between different versions of Bootstrap 
+
+* Modern UI components like cards, value boxes, sidebars, and more.
+
+This last set of features is what we will focus on now, with more on theming after the break.
+
+
+## Cards
+
+Cards are a UI element that you will recognize from many modern websites. They are rectangular containers with borders and padding that are used to group related information. When utilized properly to group related information, they help users better digest, engage, and navigate through content
+
+```{bslib}
+#| output-location: column
+card(
+  card_header(
+    "A header"
+  ),
+  card_body(
+    shiny::markdown(
+      "Some **bold** text"
+    )
+  )
+)
+```
+
+
+## Styling cards
+
+Cards can be styled using the `class`, this is used to apply Bootstrap classes to the card and its components.
+
+```{bslib}
+#| output-location: column
+card(
+  max_height = 250,
+  card_header(
+    "Long scrollable text",
+    class = "bg-primary"
+  ),
+  card_body(
+    lorem::ipsum(paragraphs = 3, sentences = 5),
+    class = "bg-info"
+  )
+)
+```
+
+::: aside
+See Bootstrap's [background](https://getbootstrap.com/docs/5.3/utilities/background/) and [color](https://getbootstrap.com/docs/5.3/utilities/colors/) documentation for class options.
+:::
+
+## Multiple card bodies
+
+Cards are also super flexible and can contain multiple `card_body()` elements. This can be useful for creating complex layouts.
+
+```{bslib}
+#| output-location: column
+card(
+  max_height = 450,
+  card_header(
+    "Text and a map!",
+    class = "bg-dark"
+  ),
+  card_body(
+    max_height = 200, 
+    class = "p-0",
+    leaflet::leaflet() |>
+      leaflet::addTiles()
+  ),
+  card_body(
+    lorem::ipsum(
+      paragraphs = 1, 
+      sentences = 3
+    )
+  )
+)
+```
+
+## Value boxes
+
+Value boxes are the other major UI component provided by `bslib`. They are a simple way to display a value and a label in a styled box. They are often used to display key metrics in a dashboard.
+
+
+```{bslib}
+#| output-location: column
+value_box(
+  title = "1st value",
+  value = 123,
+  showcase = bs_icon("bar-chart"),
+  theme = "primary",
+  p("The 1st detail")
+)
+```
+
+<p></p>
+
+```{bslib}
+#| output-location: column
+value_box(
+  title = "2nd value",
+  value = 456,
+  showcase = bs_icon("graph-up"),
+  theme = "secondary",
+  p("The 2nd detail"),
+  p("The 3rd detail")
+)
+```
+
+
+## Demo 08 - Shiny + bslib
+
+We will start by modifying our previous weather app to use `bslib`'s UI elements, starting with cards and building from there.
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo08.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|17-40|17,19|32-39|54-56"
+#| file: ../demos/demo08.R
+```
+
+
+# Dynamic UIs
+
+## Adding value boxes
+
+Previously we had included a table that showed minimum and maximum temperatures - lets try presenting these using value boxes instead.
+
+Before we get to the code lets think a little bit about how we might do this.
+
+. . .
+
+
+```{r eval=FALSE}
+value_box(
+  title = "Average Temp",
+  value = textOutput("avgtemp"),
+  showcase = bsicons::bs_icon("thermometer-half"),
+  theme = "green"
+)
+```
+
+
+## `uiOutput()` and `renderUI()`
+
+To handle situations like this Shiny provides the ability to dynamically generate UI elements entirely within the server function.
+
+For our case we can create all of the value boxes we need in a single `renderUI()` call making our code simpler and more maintainable.
+
+Additionally, since `renderUI()` is a reactive context we can perform all of our calculations in the same place .
+
+
+## Demo 09 - Value boxes
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo09.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "|40|54-79|59,78|60-65"
+#| file: ../demos/demo09.R
+```
+
+
+## Demo 10 - bslib Bells and Whistles 
+
+::: {.code-file .sourceCode .cell-code}
+`r fontawesome::fa("file")` `demos/demo10.R`
+:::
+```{r}
+#| eval: false
+#| code-line-numbers: "32-38|39|44"
+#| file: ../demos/demo10.R
+```
