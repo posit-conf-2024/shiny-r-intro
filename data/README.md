@@ -17,7 +17,6 @@
 | `wind_dir`     | The average wind direction in degrees (°) |
 | `wind_speed`   | The average wind speed in km/h            |
 | `air_press`    | The average sea-level air pressure in hPa |
-| `total_sun`    | The daily sunshine total in minutes (m)   |
 
 # Data Source
 

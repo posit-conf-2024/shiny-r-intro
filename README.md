@@ -10,7 +10,7 @@ Colin Rundel
 
 :alarm_clock:     09:00 - 17:00  
 
-:hotel:           701 | Clallum
+:hotel:           701 Clallum
 
 :writing_hand:    [pos.it/conf](http://pos.it/conf)
 
