@@ -119,17 +119,6 @@ Once you have done that you should then add logic to the `server` function to re
 countdown::countdown(9)
 ```
 
-## Exercise 03 - Solution
-
-::: {.code-file .sourceCode .cell-code}
-`r fontawesome::fa("file")` `exercises/solutions/ex03_soln.R`
-:::
-```{r}
-#| eval: false
-#| code-line-numbers: "|37|50-61"
-#| file: ../exercises/solutions/ex03_soln.R
-```
-
 
 ## Reactive graph (again)
 
