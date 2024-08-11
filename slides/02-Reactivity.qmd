@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Shiny for R<br/>Reactivity"
+title: "Reactivity"
 author: "Colin Rundel"
 format: 
   revealjs:

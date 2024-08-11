@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Shiny for R<br/>Dynamic UIs"
+title: "Dynamic UIs"
 author: "Colin Rundel"
 format: 
   revealjs:

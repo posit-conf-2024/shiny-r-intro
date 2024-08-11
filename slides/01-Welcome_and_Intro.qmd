@@ -1,5 +1,5 @@
 ---
-title: "Introduction to Shiny for R<br/>Welcome"
+title: "Welcome &<br/>Introduction to Shiny"
 author: "Colin Rundel"
 format: 
   revealjs:
