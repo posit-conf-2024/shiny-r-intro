@@ -11,11 +11,10 @@ d_vars = c("Average temp" = "temp_avg",
            "Snow depth" = "snow",
            "Wind direction" = "wind_direction",
            "Wind speed" = "wind_speed",
-           "Air pressure" = "air_press",
-           "Total sunshine" = "total_sun")
+           "Air pressure" = "air_press")
 
 ui = page_sidebar(
-  title = "Weather Forecasts",
+  title = "Weather Data",
   sidebar = sidebar(
     selectInput(
       "region", "Select a region", 
