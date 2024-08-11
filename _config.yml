@@ -8,4 +8,4 @@ exclude:
 - slides/03-Dynamic_UIs.qmd
 - slides/04-theming_publishing.qmd
 - slides/images/mermaid.md
-- data/README.md
+
