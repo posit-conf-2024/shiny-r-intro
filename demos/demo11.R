@@ -13,8 +13,6 @@ d_vars = c("Average temp" = "temp_avg",
            "Wind speed" = "wind_speed",
            "Air pressure" = "air_press")
 
-thematic::thematic_shiny(bg = "auto", fg = "auto", font = "auto")
-
 ui = page_sidebar(
   theme = bs_theme(version = 5),
   title = "Weather Data",
@@ -30,19 +28,10 @@ ui = page_sidebar(
   card(
     card_header(
       textOutput("title"),
-      popover(
-        bsicons::bs_icon("gear", title = "Settings"),
-        selectInput(
-          "var", "Select a variable",
-          choices = d_vars, selected = "temp_avg"
-        )
-      ),
-      class = "d-flex justify-content-between align-items-center"
     ),
     card_body(
       plotOutput("plot")
-    ),
-    full_screen = TRUE
+    )
   ),
   uiOutput("valueboxes")
 )
