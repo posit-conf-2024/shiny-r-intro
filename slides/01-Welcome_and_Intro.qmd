@@ -490,7 +490,7 @@ What happens if you use an input capable of selecting multiple values, e.g.
 
 * `checkboxGroupInput()` 
 
-* or `selectInput()` with `multiple = TRUE`?
+* or `selectInput()` with `multiple = TRUE`
 
 
 ```{r}
