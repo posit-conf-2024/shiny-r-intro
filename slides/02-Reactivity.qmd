@@ -42,7 +42,7 @@ title-slide-attributes:
 Our inputs and outputs are defined by the elements in our `ui`.
 
 
-## Reactive expression to reactive graph
+## Reactive graph
 
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo01.R`
@@ -73,16 +73,16 @@ The "reactive" logic is defined in our `server` function - `shiny` takes care of
 ```{r}
 #| eval: false
 #| file: "../demos/demo02.R"
-#| code-line-numbers: "|6-13|30-33|32|42-46|45"
+#| code-line-numbers: "|6-13|30-33|32|42-48|45"
 ```
-
-## `.data` & `.env`
 
 ## `.data` pronoun
 
-One aspect of the improved code that you might be unfamiliar with is the use of `.data[[input$var]]` within the `renderPlot()` reactive expression. This is a useful feature from `rlang` that can be used across much of the tidyverse to reference columns in a data frame using a variable. 
+One aspect of the improved code that you might be unfamiliar with is the use of `.data[[input$var]]` within  `renderPlot()`. 
 
-Specifically it is an alternative that is useful for avoiding some of the complexity around "non-standard evaluation" with `rlang` (e.g. `{{`, `!!`, `enquo()`, etc.) when working with functions built with the tidy eval framework (e.g. `dplyr` and `ggplot2`).
+This is a useful feature from `rlang` that can be used across much of the tidyverse to reference columns in a data frame using a variable. 
+
+It helps avoid some of the complexity around "non-standard evaluation" (e.g. `{{`, `!!`, `enquo()`, etc.) when working with functions built with tidyeval (e.g. `dplyr` and `ggplot2`).
 
 
 ::: aside
@@ -111,12 +111,12 @@ Once you have done that you should then add logic to the `server` function to re
 
 - You will need to add an appropriate output in the `ui` 
 - and a corresponding reactive expression in the `server` function to generate these summaries.
-- `lubridate::year()` will be useful along with `dplyr`s `group_by()` and `summarize()`.
+- `lubridate::year()` will be useful along with `dplyr::group_by()` and `dplyr::summarize()`.
 
 
 ```{r}
 #| echo: false
-countdown::countdown(9)
+countdown::countdown(12)
 ```
 
 
@@ -151,47 +151,51 @@ shiny::reactlogShow()
 
 # `reactive()`
 
-## Don't repeat yourself (DRY)
+## Demo 03 - Don't repeat yourself
 
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo03.R`
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|31-32,39-40"
+#| code-line-numbers: "|44,45|52,53|44,45,52,53"
 #| file: ../demos/demo03.R
 ```
 
 
-## Demo 04 - Using a reactive
+## Demo 04 - Enter reactive
 
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo04.R`
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|45-48|51,58"
+#| code-line-numbers: "|44-47|50,58"
 #| file: ../demos/demo04.R
 ```
 
-## Reactive expressions
+## More reactive expressions
 
-This is an example of a "reactive conductor" as it exists in between sources (e.g. an input) and endpoints (e.g. an output).
+This is an example of a "reactive conductor" - it is a new type of reactive expression that exists between sources (e.g. an input) and endpoints (e.g. an output).
 
-As such, a `reactive()` depends on various upstream inputs and then has 1 or more downstream outputs.
+As such, a `reactive()` depends on various upstream inputs, returns a value of some kind which used by 1 or more downstream outputs (or other conductors).
+
+. . .
 
 Their primary use is similar to a function in an R script, they help to
 
-- avoid repeating yourself
+- avoid repeating ourselves
 
 - decompose complex computations into smaller / more modular steps
 
-- can improve computational efficiency by breaking up / simplifying reactive dependencies
+- improve computational efficiency by breaking up / simplifying reactive dependencies
 
 
 ## `reactive()` tips
 
-- Expressions written in the same way as `render*()` functions
+- Expressions are written in the same way as `render*()` functions
+
+. . .
 
 - If `react_obj = reactive({...})` then any consumer 
   must access value using `react_obj()` and *not* `react_obj`
@@ -202,7 +206,9 @@ Their primary use is similar to a function in an R script, they help to
       ## Error: object of type 'closure' is not subsettable`
       ```
 
-- Like `input` reactive expressions may only be used within a reactive context (e.g. `render*()`, `reactive()`, `observer()`, etc.)
+. . .
+
+- Like `input` reactive expressions may only be used within reactive contexts (e.g. `render*()`, `reactive()`, `observer()`, etc.)
   
   ```
   ## Error: Operation not allowed without an active reactive context. (You tried to do something that can only be done from inside a reactive expression or observer.)
@@ -242,7 +248,7 @@ flowchart LR
 
 ## `observer()`
 
-These are constructed in the same way as a `reactive()` however an observer does not return a value, as such they are used for their side effects.
+These are constructed in the same way as a `reactive()` however an observer does not return a value, instead they are used for their *side effects*.
 
 * The side effects in most cases involve sending data to the client broswer, e.g. updating a UI element
 
@@ -255,7 +261,7 @@ These are constructed in the same way as a `reactive()` however an observer does
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|19-22|23-25|40-48"
+#| code-line-numbers: "|19-22|23-25|39-47"
 #| file: ../demos/demo05.R
 ```
 
@@ -296,9 +302,11 @@ Caused by warning in `min()`:
 
 . . .
 
-This can be a common occurrence, particularly at initialization (or if a user enters bad / unexpected input).
+This can be a common occurrence with Shiny, particularly at initialization or when a user enters bad / unexpected input(s).
 
-A good way to protect against this is to validate inputs - the simplest way is to use `req()` which checks if a value is [truthy](https://shiny.rstudio.com/reference/shiny/latest/isTruthy.html). Non-truthy values prevent further execution of the reactive code (and downstream consumer's code).
+A good way to protect against this is to validate your inputs - the simplest way is to use `req()` which checks if a value is [truthy](https://shiny.rstudio.com/reference/shiny/latest/isTruthy.html). 
+
+Non-truthy values prevent further execution of the reactive code (and downstream consumer's code).
 
 
 ## Your turn - Exercise 04
@@ -312,14 +320,16 @@ Also, think about if there are any other locations in our app where `req()` migh
 
 ```{r}
 #| echo: false
-countdown::countdown(5)
+countdown::countdown(10)
 ```
 
 
 
 ## A note on observers
 
-Reactive graphs are meant to be acyclic, that is they should not have circular dependencies. The use of observers can introduce cycles which can then lead to infinite loops, see the following example:
+Reactive graphs are meant to be acyclic, that is they should not have circular dependencies. 
+
+The use of observers can introduce cycles which can then lead to infinite loops, see the following example:
 
 ```{r}
 #| eval: false
