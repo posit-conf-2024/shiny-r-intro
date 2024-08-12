@@ -1,6 +1,6 @@
 &nbsp;
 
-### posit::conf 2024 - Introduction to Shiny for R
+### posit::conf 2024
 
 Colin Rundel
 
