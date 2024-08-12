@@ -14,7 +14,7 @@ Colin Rundel
 
 :writing_hand:    [pos.it/conf](http://pos.it/conf)
 
-:link:            [pos.it/shiny_r_intro_24](http://pos.it/shiny_r_intro_24)
+:link:            [pos.it/shiny_r_intro_24](http://pos.it/shiny-r-intro-24)
 
 :octocat:         [posit-conf-2024/shiny-r-intro](https://github.com/posit-conf-2024/shiny-r-intro)
 
