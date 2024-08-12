@@ -1,4 +1,4 @@
-# Data
+# Data Dictionary
 
 | Parameter      | Description                               |
 |----------------|-------------------------------------------|
