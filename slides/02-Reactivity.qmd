@@ -50,7 +50,7 @@ Our inputs and outputs are defined by the elements in our `ui`.
 ::: {.code-half}
 ```{r}
 #| eval: false
-#| code-line-numbers: "|28-35|29-34"
+#| code-line-numbers: "|29-34|29,31"
 #| file: "../demos/demo01.R"
 ```
 :::
@@ -105,7 +105,7 @@ With these additions, what should our reactive graph look like now?
 
 ## Your turn - Exercise 03
 
-Starting with the code  in `exercises/ex03.R` (based on `demo02.R`'s code) add a `tableOutput()` labeled `minmax` to the app's `mainPanel()`.
+Starting with the code  in `exercises/ex03.R` (based on `demo02.R`'s code) add a `tableOutput()` with id `minmax` to the app's `mainPanel()`.
 
 Once you have done that you should then add logic to the `server` function to render a table that shows the min and max temperature for each year contained in these data.
 
