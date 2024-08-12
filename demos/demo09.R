@@ -26,7 +26,7 @@ ui = page_sidebar(
     ),
     selectInput(
       "var", "Select a variable",
-      choices = d_vars, selected = "tavg"
+      choices = d_vars, selected = "temp_avg"
     )
   ),
   card(
