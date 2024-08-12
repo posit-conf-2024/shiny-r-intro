@@ -66,19 +66,19 @@ server = function(input, output, session) {
         title = "Average Temp",
         value = mean(d_city()$temp_avg, na.rm=TRUE) |> clean(),
         showcase = bsicons::bs_icon("thermometer-half"),
-        theme = "green"
+        theme = "success"
       ),
       value_box(
         title = "Minimum Temp",
         value = min(d_city()$temp_min, na.rm=TRUE) |> clean(),
         showcase = bsicons::bs_icon("thermometer-snow"),
-        theme = "blue"
+        theme = "primary"
       ),
       value_box(
         title = "Maximum Temp",
         value = max(d_city()$temp_max, na.rm=TRUE) |> clean(),
         showcase = bsicons::bs_icon("thermometer-sun"),
-        theme = "red"
+        theme = "danger"
       )
     )
   })

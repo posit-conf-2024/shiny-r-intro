@@ -14,7 +14,7 @@ d_vars = c("Average temp" = "temp_avg",
            "Air pressure" = "air_press")
 
 ui = page_sidebar(
-  theme = bs_theme(),
+  theme = bs_theme(bootswatch = "zephyr", base_font = "Prompt", code_font = "Fira Sans"),
   title = "Weather Data",
   sidebar = sidebar(
     selectInput(
@@ -28,10 +28,19 @@ ui = page_sidebar(
   card(
     card_header(
       textOutput("title"),
+      popover(
+        bsicons::bs_icon("gear", title = "Settings"),
+        selectInput(
+          "var", "Select a variable",
+          choices = d_vars, selected = "temp_avg"
+        )
+      ),
+      class = "d-flex justify-content-between align-items-center"
     ),
     card_body(
       plotOutput("plot")
-    )
+    ),
+    full_screen = TRUE
   ),
   uiOutput("valueboxes")
 )
@@ -93,5 +102,7 @@ server = function(input, output, session) {
       theme_minimal()
   })
 }
+
+thematic::thematic_shiny()
 
 shinyApp(ui = ui, server = server)

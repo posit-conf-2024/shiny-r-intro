@@ -367,7 +367,7 @@ value_box(
   title = "Average Temp",
   value = textOutput("avgtemp"),
   showcase = bsicons::bs_icon("thermometer-half"),
-  theme = "green"
+  theme = "success"
 )
 ```
 
