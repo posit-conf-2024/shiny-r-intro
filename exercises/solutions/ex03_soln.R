@@ -1,7 +1,7 @@
 library(tidyverse)
 library(shiny)
 
-d = readr::read_csv("data/weather.csv")
+d = readr::read_csv(here::here("data/weather.csv"))
 
 d_vars = c("Average temp" = "temp_avg",
            "Min temp" = "temp_min",
@@ -44,7 +44,8 @@ server = function(input, output, session) {
     d |>
       filter(name %in% input$name) |>
       ggplot(aes(x=date, y=.data[[input$var]])) +
-      geom_line()
+      geom_line() +
+      theme_minimal()
   })
   
   output$minmax = renderTable({

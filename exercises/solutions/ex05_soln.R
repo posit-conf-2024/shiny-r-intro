@@ -84,7 +84,8 @@ shinyApp(
       d_city() |>
         ggplot(aes(x=date, y=.data[[input$var]])) +
         ggtitle(input$var) +
-        geom_line()
+        geom_line() +
+        theme_minimal()
     })
   }
 )

@@ -1,53 +1,65 @@
 library(tidyverse)
 library(shiny)
+
 d = readr::read_csv(here::here("data/weather.csv"))
 
-d_vars = d |>
-  select(where(is.numeric)) |>
-  names()
+d_vars = c("Average temp" = "temp_avg",
+           "Min temp" = "temp_min",
+           "Max temp" = "temp_max",
+           "Total precip" = "precip",
+           "Snow depth" = "snow",
+           "Wind direction" = "wind_direction",
+           "Wind speed" = "wind_speed",
+           "Air pressure" = "air_press",
+           "Total sunshine" = "total_sun")
 
-shinyApp(
-  ui = fluidPage(
-    titlePanel("Weather Data"),
-    sidebarLayout(
-      sidebarPanel(
-        radioButtons(
-          "city", "Select a city",
-          choices = c("Chicago", "Durham", "Sedona", "New York", "Los Angeles")
-        ),
-        selectInput(
-          "var", "Select a variable",
-          choices = d_vars, selected = "temp"
+ui = fluidPage(
+  titlePanel("Weather Data"),
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons(
+        "name", "Select an airport",
+        choices = c(
+          "Raleigh-Durham",
+          "Houston Intercontinental",
+          "Denver",
+          "Los Angeles",
+          "John F. Kennedy"
         )
       ),
-      mainPanel( 
-        plotOutput("plot"),
-        tableOutput("minmax")
+      selectInput(
+        "var", "Select a variable",
+        choices = d_vars, selected = "tavg"
       )
+    ),
+    mainPanel( 
+      plotOutput("plot"),
+      tableOutput("minmax")
     )
-  ),
-  server = function(input, output, session) {
-    output$plot = renderPlot({
-      d |>
-        filter(city %in% input$city) |>
-        ggplot(aes(x=time, y=.data[[input$var]])) +
-        ggtitle(input$var) +
-        geom_line()
-    })
-    
-    output$minmax = renderTable({
-      d |>
-        filter(city %in% input$city) |>
-        mutate(
-          day = lubridate::wday(time, label = TRUE, abbr = FALSE),
-          date = as.character(lubridate::date(time))
-        ) |>
-        group_by(date, day) |>
-        summarize(
-          `min` = min(.data[[input$var]]),
-          `max` = max(.data[[input$var]]),
-          .groups = "drop"
-        )
-    })
-  }
+  )
 )
+
+server = function(input, output, session) {
+  output$plot = renderPlot({
+    d |>
+      filter(name %in% input$name) |>
+      ggplot(aes(x=date, y=.data[[input$var]])) +
+      geom_line() +
+      theme_minimal()
+  })
+  
+  output$minmax = renderTable({
+    d |> 
+      filter(name %in% input$name) |>
+      mutate(
+        year = lubridate::year(date) |> as.integer()
+      ) |>
+      summarize(
+        `min temp` = min(temp_min),
+        `max temp` = max(temp_max),
+        .by = year
+      )
+  })
+}
+
+shinyApp(ui = ui, server = server)

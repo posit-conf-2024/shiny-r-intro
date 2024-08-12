@@ -1,7 +1,7 @@
 library(tidyverse)
 library(shiny)
 
-d = readr::read_csv("data/weather.csv")
+d = readr::read_csv(here::here("data/weather.csv"))
 
 ui = fluidPage(
   titlePanel("Temperatures at Major Airports"),
@@ -30,7 +30,8 @@ server = function(input, output, session) {
     d |>
       filter(name %in% input$name) |>
       ggplot(aes(x=date, y=temp_avg)) +
-      geom_line()
+      geom_line() +
+      theme_minimal()
   })
 }
 

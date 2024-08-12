@@ -3,20 +3,11 @@ library(shiny)
 
 d = readr::read_csv(here::here("data/weather.csv"))
 
-d_vars = c("Average temp" = "temp_avg",
-           "Min temp" = "temp_min",
-           "Max temp" = "temp_max",
-           "Total precip" = "precip",
-           "Snow depth" = "snow",
-           "Wind direction" = "wind_direction",
-           "Wind speed" = "wind_speed",
-           "Air pressure" = "air_press")
-
 ui = fluidPage(
-  titlePanel("Weather Data"),
+  titlePanel("Temperatures at Major Airports"),
   sidebarLayout(
     sidebarPanel(
-      radioButtons(
+      selectInput(
         "name", "Select an airport",
         choices = c(
           "Seattle-Tacoma",
@@ -25,12 +16,10 @@ ui = fluidPage(
           "Denver",
           "Los Angeles",
           "John F. Kennedy"
-        )
-      ),
-      selectInput(
-        "var", "Select a variable",
-        choices = d_vars, selected = "tavg"
-      )
+        ),
+        selected = "Seattle-Tacoma",
+        multiple = TRUE
+      ) 
     ),
     mainPanel( 
       plotOutput("plot")
@@ -42,9 +31,11 @@ server = function(input, output, session) {
   output$plot = renderPlot({
     d |>
       filter(name %in% input$name) |>
-      ggplot(aes(x=date, y=.data[[input$var]])) +
+      ggplot(aes(x=date, y=temp_avg, color=name)) +
       geom_line() +
-      theme_minimal()
+      theme_minimal() +
+      labs(color = "") +
+      theme(legend.position='bottom')
   })
 }
 

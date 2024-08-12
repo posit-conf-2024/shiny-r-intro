@@ -56,7 +56,8 @@ server = function(input, output, session) {
     d_city() |>
       ggplot(aes(x=date, y=.data[[input$var]])) +
       ggtitle(names(d_vars)[d_vars==input$var]) +
-      geom_line()
+      geom_line() +
+      theme_minimal()
   })
   
   output$minmax = renderTable({

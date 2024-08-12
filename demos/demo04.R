@@ -10,8 +10,7 @@ d_vars = c("Average temp" = "temp_avg",
            "Snow depth" = "snow",
            "Wind direction" = "wind_direction",
            "Wind speed" = "wind_speed",
-           "Air pressure" = "air_press",
-           "Total sunshine" = "total_sun")
+           "Air pressure" = "air_press")
 
 ui = fluidPage(
   titlePanel("Weather Data"),
@@ -51,7 +50,8 @@ server = function(input, output, session) {
     d_city() |>
       ggplot(aes(x=date, y=.data[[input$var]])) +
       ggtitle(names(d_vars)[d_vars==input$var]) +
-      geom_line()
+      geom_line() +
+      theme_minimal()
   })
   
   output$minmax = renderTable({
