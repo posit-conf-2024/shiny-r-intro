@@ -18,7 +18,7 @@ Colin Rundel
 
 <img class="emoji" title=":octocat:" alt=":octocat:" src="https://github.githubassets.com/images/icons/emoji/octocat.png" height="20" width="20" align="absmiddle">         [posit-conf-2024/shiny-r-intro](https://github.com/posit-conf-2024/shiny-r-intro)
 
-<img class="emoji" title=":discord:" alt=":discord:" src="slides/images/discord.png" height="20" width="20" align="absmiddle">         #workshop-shiny-r-intro
+<img class="emoji" title=":discord:" alt=":discord:" src="slides/images/discord.png" height="20" width="20" align="absmiddle">         [#workshop-shiny-r-intro]()
 -----
 
 ## Overview
