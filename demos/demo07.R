@@ -40,7 +40,7 @@ ui = fluidPage(
 server = function(input, output, session) {
   
   observe({
-    showModal(modalDialog(
+    showModal( modalDialog(
       title = "Download data",
       shiny::dateRangeInput(
         "dl_dates", "Select date range",
@@ -54,7 +54,7 @@ server = function(input, output, session) {
         downloadButton("download"),
         modalButton("Cancel")
       )
-    ))
+    ) )
   }) |>
     bindEvent(input$download_modal)
   
