@@ -14,10 +14,11 @@ Colin Rundel
 
 :writing_hand:    [pos.it/conf](http://pos.it/conf)
 
-:link:            [pos.it/shiny_r_intro_24](http://pos.it/shiny-r-intro-24)
+:link:            [pos.it/shiny-r-intro-24](http://pos.it/shiny-r-intro-24)
 
 <img class="emoji" title=":octocat:" alt=":octocat:" src="https://github.githubassets.com/images/icons/emoji/octocat.png" height="20" width="20" align="absmiddle">         [posit-conf-2024/shiny-r-intro](https://github.com/posit-conf-2024/shiny-r-intro)
 
+<img class="emoji" title=":discord:" alt=":discord:" src="slides/images/discord.png" height="20" width="20" align="absmiddle">         #workshop-shiny-r-intro
 -----
 
 ## Overview
