@@ -16,7 +16,7 @@ Colin Rundel
 
 :link:            [pos.it/shiny_r_intro_24](http://pos.it/shiny-r-intro-24)
 
-:octocat:         [posit-conf-2024/shiny-r-intro](https://github.com/posit-conf-2024/shiny-r-intro)
+<img class="emoji" title=":octocat:" alt=":octocat:" src="https://github.githubassets.com/images/icons/emoji/octocat.png" height="20" width="20" align="absmiddle">         [posit-conf-2024/shiny-r-intro](https://github.com/posit-conf-2024/shiny-r-intro)
 
 -----
 
