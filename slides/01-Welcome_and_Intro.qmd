@@ -62,9 +62,9 @@ library(shiny)
 
 We wont go around the room, but take the next couple of minutes to introduce yourself to your neighbors.
 
-Some suggested topics,
+Some suggested topics:
 
-* Name
+* What is your name
 
 * Where you are coming from
 
@@ -77,17 +77,32 @@ countdown::countdown(3)
 ```
 
 
-## Workshop materials
+## Materials
 
 <br/><br/>
 
-::: {.larger style="text-align: center;"}
-<https://github.com/posit-conf-2024/shiny-r-intro>
+:::: {.larger}
+Website:
 
-<br/>
-
-<https://pos.it/shiny_r_intro_24>
+::: {style="text-align: center;"}
+[pos.it/shiny-r-intro-24](https://pos.it/shiny-r-intro-24)
 :::
+
+<p/>
+
+GitHub:
+
+::: {style="text-align: center;"}
+[github.com/posit-conf-2024/shiny-r-intro](https://github.com/posit-conf-2024/shiny-r-intro)
+:::
+
+::::
+
+
+::: aside
+All of the materials for this workshop licensed under a [Creative Commons Attribution Share Alike 4.0 International license](https://github.com/posit-conf-2024/shiny-r-intro/blob/main/LICENSE.md).
+:::
+
 
 
 ## Schedule
@@ -101,26 +116,37 @@ countdown::countdown(3)
 | 12:30 - 13:30 | *Lunch break*         |
 | 13:30 - 15:00 | Dynamic UIs           |
 | 15:00 - 15:30 | *Coffee break*        |
-| 15:30 - 16:30 | Theming & Publishing  |
+| 15:30 - 17:00 | Theming & Publishing  |
 
 
 ## WiFi
 
+<br/>
+
 ::: larger
-Username: **Posit Conf 2024**
+Username: 
 
-Password: **conf2024**
+::: center
+**Posit Conf 2024**
 :::
 
-<br><br>
 
-::: aside
+Password: 
+
+::: center
+**conf2024**
+:::
+
+:::
+
+<br/>
+
 If you have any difficulty with your connection please let us (myself and or the TAs) know so we can escalate issues if needed.
-:::
+
 
 ## Code of Conduct
 
-The Code of Conduct can be found at <https://posit.co/code-of-conduct>.
+The Code of Conduct can be found at [posit.co/code-of-conduct](https://posit.co/code-of-conduct).
 
 Please review it carefully.
 
@@ -132,10 +158,10 @@ Please see the policy linked above for contact information.
 
 - There are **gender-neutral bathrooms** located on floors 3, 4, 5, 6, and 7.
 
-- The **meditation and prayer room** is Room 503.
-Available Mon & Tues 7am - 7pm, and Wed 7am - 5pm.
+- The **meditation and prayer room** is Room 503, it is
+available Mon & Tues 7am - 7pm, and Wed 7am - 5pm.
 
-- The **lactation room** is located in 509, same timings as above.
+- The **lactation room** is located in 509, with the same timings as above.
 
 - Participants who do not wish to be photographed have **red lanyards**; please note everyone’s lanyard colors before taking a photo and respect their choices.
 
@@ -145,15 +171,15 @@ Available Mon & Tues 7am - 7pm, and Wed 7am - 5pm.
 ::: {.r-hstack}
 
 ::: {style="text-align: center;"}
-::: {data-id="box1" style="background: #CC4341; width: 200px; height: 200px; margin: 25px;"}
-:::
-I'm stuck
-:::
-
-::: {style="text-align: center;"}
 ::: {data-id="box2" style="border: 2px solid; width: 200px; height: 200px; margin: 25px;"}
 :::
 I'm working
+:::
+
+::: {style="text-align: center;"}
+::: {data-id="box1" style="background: #CC4341; width: 200px; height: 200px; margin: 25px;"}
+:::
+I'm stuck
 :::
 
 ::: {style="text-align: center;"}
@@ -245,9 +271,18 @@ pushed at the end of each session
 
 ## Shiny
 
+::: center
+![](images/shiny.png){width=25%}
+:::
+
 > Shiny is an R package that makes it easy to build interactive web apps straight from R. You can host standalone apps on a webpage or embed them in R Markdown documents or build dashboards. You can also extend your Shiny apps with CSS themes, htmlwidgets, and JavaScript actions.
 
-. . .
+
+
+
+## App Anatomy
+
+<br/>
 
 ::: columns
 ::: {.column width="40%" .large}
@@ -283,12 +318,12 @@ Client / Browser
 :::
 
 
-## Anatomy of an App
+## App Components
 
 ```{r shiny-anatomy}
 #| eval: false
 #| echo: true
-#| code-line-numbers: "|7|3|5"
+#| code-line-numbers: "|1|7|3|5"
 library(shiny)
 
 ui = list()
@@ -316,7 +351,7 @@ readr::read_csv(here::here("data/weather.csv"))
 
 
 ::: aside
-See [here](https://posit-conf-2024.github.io/shiny-r-intro/data/) for a full data dictionary
+See [here](https://posit-conf-2024.github.io/shiny-r-intro/data/) for a full data dictionary and [source code](https://github.com/posit-conf-2024/shiny-r-intro/blob/main/data/raw_weather.R) for collecting these data.
 :::
 
 
@@ -328,14 +363,14 @@ See [here](https://posit-conf-2024.github.io/shiny-r-intro/data/) for a full dat
 :::
 ```{r}
 #| eval: false
-#| code-line-numbers: "|6-26|10-20|23|28-35|37"
+#| code-line-numbers: "|6-26|10-20|23|28-36|38"
 #| file: "../demos/demo01.R"
 ```
 
 
 ## Your turn - Exercise 01
 
-Open `exercises/ex01.R`, or Copy the code from the previous slide, and run it via the Run App button in RStudio.
+Open `exercises/ex01.R` in Posit cloud and execute it via the Run App button in RStudio.
 
 Check that you are able successfully run the shiny app and are able to interact with it by picking a new airport. 
 
@@ -360,7 +395,7 @@ A couple of quick tips:
 - If you are stuck, ask a neighbor for help and/or raise your hand and myself or a TA will come by
 
 
-# UI
+# UIs
 
 ## Sidebar layout
 
@@ -371,6 +406,18 @@ A couple of quick tips:
 ::: aside
 From [Mastering Shiny](https://mastering-shiny.org/action-layout.html#page-with-sidebar)
 :::
+
+## UI functions are HTML
+
+One of the neat tricks of Shiny is that the interface is just a web page, and this can be seen by the fact that UI functions are just R functions that generate HTML. 
+
+We can run any of the following in our console and see the HTML output generated:
+
+```{r eval=FALSE}
+fluidPage()
+sidebarLayout(sidebarPanel(),mainPanel())
+radioButtons("test", "Test", choices = c("A","B","C"))
+```
 
 ## Multi-row layout
 
@@ -386,7 +433,7 @@ From [Mastering Shiny](https://mastering-shiny.org/action-layout.html#multi-row)
 
 -   Tabsets 
     
-    - see `tabsetPanel()`
+    - See `tabsetPanel()`
 
 -   Navbars and navlists
 
