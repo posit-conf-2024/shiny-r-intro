@@ -185,14 +185,14 @@ We can build a shinylive site using,
 
 ```{r}
 #| eval: false
-shinylive::export("demos/demo12","demos/demo12/site")
+shinylive::export("demos/demo13","demos/demo13/site")
 ```
 
 you can then run a local server with,
 
 ```{r}
 #| eval: false
-httpuv::runStaticServer("demos/demo12/site")
+httpuv::runStaticServer("demos/demo13/site")
 ```
 
 or check out the version of the app that is running on GitHub pages as part of this workshop,
