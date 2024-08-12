@@ -24,35 +24,39 @@ library(shiny)
 
 # Welcome
 
-## Instructor
+## Introductions
 
 ::: columns
-::: {.column width="40%"}
-![](images/colin-rundel.png){fig-align="center" width="75%"}
-:::
-
-::: {.column width="10%"}
-:::
-
-::: {.column width="50%"}
+::: {.column width="50%" .center}
 <br/>
+<br/>
+![](images/colin-rundel.png){width="50%"}
+:::
 
-### Colin Rundel
 
-#### Associate Professor of the Practice
-
-#### Department of Statistical Science
-
-#### Duke University
-
-#### [rundel.github.io](https://rundel.github.io)
+::: {.column width="50%" .center}
+![](images/tas.png){width="75%"}
 :::
 :::
 
-## Teaching Assistants
 
-- Jeremy Allen (Posit)
-- Joe Cheng
+:::: {.columns}
+::: {.column width='10%'}
+:::
+::: {.column width='40%'}
+| Colin Rundel
+| Duke University
+:::
+
+::: {.column width='10%'}
+:::
+::: {.column width='40%'}
+| Jeremy Allen & Joe Cheng
+| Posit
+:::
+::::
+
+
 
 ## Introduce yourself
 
@@ -91,52 +95,50 @@ countdown::countdown(3)
 
 | Time          | Activity              |
 | :------------ | :-------------------- |
-| 09:00 - 09:30 | Welcome               |
-| 09:30 - 10:30 | Intro to Shiny        |
+| 09:00 - 10:30 | Welcome & Intro       |
 | 10:30 - 11:00 | *Coffee break*        |
-| 11:00 - 12:30 | Basic Reactivity      |
+| 11:00 - 12:30 | Reactivity            |
 | 12:30 - 13:30 | *Lunch break*         |
-| 13:30 - 15:00 | Observers & reactives |
+| 13:30 - 15:00 | Dynamic UIs           |
 | 15:00 - 15:30 | *Coffee break*        |
-| 15:30 - 17:00 | Themeing & Publishing |
+| 15:30 - 16:30 | Theming & Publishing  |
 
 
 ## WiFi
 
-:::{.r-stack}
-:::{.larger}
-<br/><br/>
-Network: **Posit Conf 2024**
+::: larger
+Username: **Posit Conf 2024**
 
 Password: **conf2024**
 :::
-:::
 
+<br><br>
 
 ::: aside
-If you have any difficulty with your connection please let us (myself or the TAs) know so we can escalate issues if needed
+If you have any difficulty with your connection please let us (myself and or the TAs) know so we can escalate issues if needed.
 :::
-
-
 
 ## Code of Conduct
 
-All details are available at <https://posit.co/code-of-conduct/>. Please review them carefully.  
+The Code of Conduct can be found at <https://posit.co/code-of-conduct>.
 
-You can report Code of Conduct violations in person (any posit::conf staff ), by email ([codeofconduct@posit.co](codeofconduct@posit.co)), or by phone (844-448-1212). Please see the policy linked above for contact information.
+Please review it carefully.
 
+You can report Code of Conduct violations in person, by email, or by phone.
+
+Please see the policy linked above for contact information.
 
 ## Other useful info
 
-- There are gender-neutral bathrooms located are among the Grand Suite Bathrooms.
+- There are **gender-neutral bathrooms** located on floors 3, 4, 5, 6, and 7.
 
-- There are two meditation/prayer rooms: Grand Suite 2A and Grand Suite 2B. 
-    - Open Sunday - Tuesday 7:30 a.m. - 7:00 p.m., Wednesday 8:00 a.m. - 6:00 p.m.
+- The **meditation and prayer room** is Room 503.
+Available Mon & Tues 7am - 7pm, and Wed 7am - 5pm.
 
-- The lactation room is located in Grand Suite 1. 
-    - Open Sunday - Tuesday 7:30 a.m. - 7:00 p.m., Wednesday 8:00 a.m. - 6:00 p.m.
+- The **lactation room** is located in 509, same timings as above.
 
-- Participants who do not wish to be photographed have red lanyards; please note everyone's lanyard colors before taking a photo and respect their choices.
+- Participants who do not wish to be photographed have **red lanyards**; please note everyone’s lanyard colors before taking a photo and respect their choices.
+
 
 ## Asking for help (Stickies)
 
@@ -177,9 +179,8 @@ You should have received an email with an invitation and instructions for joinin
 This workshop has a private channel under Workshops,
 
 ::: {.large style="text-align: center"}
-#getting-started-with-shiny-r
+#workshop-shiny-r-intro
 :::
-
 
 This is a great place to ask questions, post resources, memes, or most anything else before, during, and after the workshop.
 
@@ -191,17 +192,25 @@ This is a great place to ask questions, post resources, memes, or most anything 
 
 You can use the following link to join the workshops RStudio cloud space,
 
-::: {style="text-align: center;"}
-[bit.ly/conf2024_shiny_cloud](https://bit.ly/conf2024_shiny_cloud)
+::: {.large .center}
+[bit.ly/conf24-shiny-r-intro](https://bit.ly/conf24-shiny-r-intro)
 :::
 
-
-
-<br/>
+<p/>
+<p/>
 
 Once you have joined you can then select the `get-started-shiny` assignment, 
 
-![](images/cloud_assignment.png){fig-align="center" width="60%"}
+:::: {.columns}
+::: {.column width='10%'}
+
+:::
+
+::: {.column width='80%' .center}
+![](images/cloud_assignment.png)
+:::
+::::
+
 
 which should then create a copy of all materials and launch a cloud session for you.
 
@@ -215,7 +224,7 @@ If everything is working you should see something very close to the following,
 
 ## File organization
 
-Project root:
+::: {.extra-padding}
 
 * `slides/` - all slides and related materials
 
@@ -225,9 +234,12 @@ Project root:
 
 * `exercises/solutions/` - sample solution code for each exercise 
 
+* `exercises/live/` - sample solution code we generate during the workshop, 
+pushed at the end of each session
+
 * `data/` - example data sets used in demos and exercises
 
-
+:::
 
 # Introducing Shiny
 
@@ -235,12 +247,10 @@ Project root:
 
 > Shiny is an R package that makes it easy to build interactive web apps straight from R. You can host standalone apps on a webpage or embed them in R Markdown documents or build dashboards. You can also extend your Shiny apps with CSS themes, htmlwidgets, and JavaScript actions.
 
-## Shiny App
-
-<br/>
+. . .
 
 ::: columns
-::: {.column width="40%" .larger}
+::: {.column width="40%" .large}
 Server
 
 ::: {style="border: 2px solid; border-radius: 5px; text-align:center; font-size: 90px; height: 250px"}
@@ -255,7 +265,7 @@ Server
 :::
 
 
-::: {.column width="40%" .larger}
+::: {.column width="40%" .large}
 Client / Browser
 
 ::: {style="border: 2px solid; border-radius: 5px; text-align: center; height: 250px"}
@@ -288,8 +298,30 @@ server = function(input, output, session) {}
 shinyApp(ui = ui, server = server)
 ```
 
+## Weather data
 
-## Demo 01 - A Basic Example
+We need some data that we will be able to interact with for our Shiny apps today.
+
+I've taken the liberty of collecting and preparing some historical weather data from [Meteostat](https://www.meteostat.net/) for some airports around the US.
+
+```{r}
+#| include: false
+options(pillar.print_min = 7, pillar.print_max = 7)
+```
+
+```{r}
+#| message: false
+readr::read_csv(here::here("data/weather.csv"))
+```
+
+
+::: aside
+See [here](https://posit-conf-2024.github.io/shiny-r-intro/data/) for a full data dictionary
+:::
+
+
+
+## Demo 01 - Our first app
 
 ::: {.code-file .sourceCode .cell-code}
 `r fontawesome::fa("file")` `demos/demo01.R`
@@ -303,11 +335,11 @@ shinyApp(ui = ui, server = server)
 
 ## Your turn - Exercise 01
 
-Copy the code from the previous slide (or open `exercises/ex01.R`) and try running it using the ![](images/run_app.png?display=inline-block){width=120px} button.
+Open `exercises/ex01.R`, or Copy the code from the previous slide, and run it via the Run App button in RStudio.
 
 Check that you are able successfully run the shiny app and are able to interact with it by picking a new airport. 
 
-* If everything is working try modifying the code (e.g. try adding or removing a city from `radioButtons()`).
+* If everything is working try modifying the code, e.g. try adding or removing a city from `radioButtons()`.
 
 * What happens if you add a city that is not in the `weather.csv` data set to the radio button input?
 
@@ -328,9 +360,11 @@ A couple of quick tips:
 - If you are stuck, ask a neighbor for help and/or raise your hand and myself or a TA will come by
 
 
-# UI Basics
+# UI
 
 ## Sidebar layout
+
+<br/>
 
 ![](images/layout-sidebar.png){fig-align="center" width="60%"}
 
@@ -339,6 +373,8 @@ From [Mastering Shiny](https://mastering-shiny.org/action-layout.html#page-with-
 :::
 
 ## Multi-row layout
+
+<br/>
 
 ![](images/layout-fluidrow.png){fig-align="center" width="60%"}
 
@@ -364,7 +400,10 @@ From [Mastering Shiny](https://mastering-shiny.org/action-layout.html#multi-row)
     
     - [Shinydashboard](https://rstudio.github.io/shinydashboard/)
     
+    - [Quarto Dashboards](https://quarto.org/docs/dashboards/)
+    
     - [bslib](https://rstudio.github.io/bslib/)
+    
 
 # Input Widgets
 
@@ -395,16 +434,16 @@ From [Mastering Shiny](https://mastering-shiny.org/action-layout.html#multi-row)
 
 We've just seen a number of alternative input widgets, starting from the code in `exercises/ex02.R` try changing the `radioButton()` input to something else.
 
-What happens if you use an input capable of selecting multiple values 
+What happens if you use an input capable of selecting multiple values, e.g.
 
-* e.g. `checkboxGroupInput()` 
+* `checkboxGroupInput()` 
 
-* or `selectInput(multiple = TRUE)`?
+* or `selectInput()` with `multiple = TRUE`?
 
 
 ```{r}
 #| echo: false
-countdown::countdown(6)
+countdown::countdown(10)
 ```
 
 
