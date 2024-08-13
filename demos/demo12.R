@@ -23,6 +23,10 @@ ui = page_sidebar(
     ),
     selectInput(
       "name", "Select an airport", choices = c()
+    ),
+    selectInput(
+      "var", "Select a variable",
+      choices = d_vars, selected = "temp_avg"
     )
   ),
   card(
