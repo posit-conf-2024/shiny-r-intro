@@ -23,13 +23,13 @@ knitr::knit_engines$set(bslib = function(options) {
   code = paste0(options$code, collapse = '\n')
   
   anim = !is.null(options$anim) && isTRUE(options$anim)
-  html = whisker::whisker.render(readr::read_file(".bslib_out/bslib.tmpl"))
+  html = whisker::whisker.render(readr::read_file("bslib_out/bslib.tmpl"))
   
   if (!dir.exists(".bslib_out")) {
     dir.create(".bslib_out")
   }
   
-  qmd_file = file.path(".bslib_out", paste0(options$label,".qmd"))
+  qmd_file = file.path("bslib_out", paste0(options$label,".qmd"))
   readr::write_file(html, file=qmd_file)
   quarto::quarto_render(qmd_file, quiet = TRUE)
   
